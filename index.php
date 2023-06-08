@@ -1,5 +1,5 @@
 <?php
-/* if(isset($_POST['registrar'])){
+if(isset($_POST['registrar'])){
     $credenciales["http"]["method"] = "POST";
     $credenciales["http"]["header"] = "Content-type: application/json";
     $data = [
@@ -18,8 +18,7 @@
     $config = stream_context_create($credenciales);
 
     $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
-    /* print_r($_DATA); */
-/* }   */
+}   
 
 
 if(isset($_POST['buscar'])){  
@@ -36,11 +35,98 @@ if(isset($_POST['buscar'])){
             $aca=$valor;
         }
     }
-    /* echo "<pre>";
-    var_dump($aca);
-    echo "</pre>"; */
 }else{
     unset($aca);
+}
+
+
+if(isset($_POST['eliminar'])){  
+    //echo "eliminar";
+    $cc=intval($_POST['cedula']);
+    $credenciales["http"]["method"] = "GET";
+    $credenciales["http"]["header"] = "Content-type: application/json";
+    $config = stream_context_create($credenciales);
+    $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
+    $jota1=json_decode($_DATA, true); 
+    //var_dump($jota1);
+    foreach($jota1 as $clave => $valor){ 
+        if($valor['cedula']==$cc){
+            $id=$valor['id'];
+        }
+    }
+    if(isset($id)){
+        $credenciales["http"]["method"] = "DELETE";
+        $credenciales["http"]["header"] = "Content-type: application/json";
+        $credenciales["http"]["ignore_errors"] = true;
+        $config = stream_context_create($credenciales);
+        $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores/{$id}", false, $config);
+    }else{
+        echo "<script>alert('La persona con esta cedula no funciona')</script>";
+    }
+   // header('Location: index.php');
+}
+
+if(isset($_POST['elegido'])){  
+    //echo $_POST['elegido'];
+    $cc=intval($_POST['elegido']);
+    $credenciales1["http"]["method"] = "GET";
+    $credenciales1["http"]["header"] = "Content-type: application/json";
+    $config = stream_context_create($credenciales1);
+    $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
+    $jota1=json_decode($_DATA, true); 
+    //echo "<br>";
+    foreach($jota1 as $clave => $valor){ 
+        if($valor['cedula']==$cc){
+            $aca=$valor;
+        }
+    }
+} 
+
+if(isset($_POST['editar'])){  
+    //echo "editar";
+    $cc=$_POST['cedula'];
+    $credenciales["http"]["method"] = "GET";
+    $credenciales["http"]["header"] = "Content-type: application/json";
+    $config = stream_context_create($credenciales);
+    $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
+    $jota1=json_decode($_DATA, true); 
+    //var_dump($cc);
+    //var_dump($jota1);
+    foreach($jota1 as $clave => $valor){ 
+        if($valor['cedula']==$cc){
+            $id=$valor['id'];
+        }
+    }
+    //echo $id;
+    if(isset($id)){
+        $credenciales["http"]["method"] = "PUT";
+        $credenciales["http"]["header"] = "Content-type: application/json";
+        $data = [
+            "nombre"=> $_POST['nombre'],
+            "cedula"=> $_POST['cedula'],
+            "apellidos"=> $_POST['apellidos'],
+            "direccion"=> $_POST['direccion'],
+            "edad" => $_POST['edad'],
+            "email" => $_POST['email'],
+            "horario" => $_POST['horario'],
+            "team" => $_POST['team'],
+            "trainer" => $_POST['trainer'],
+        ];
+        $data1=[];
+        foreach($data as $clave => $valor){ 
+            if (!empty($valor)){
+                $data1[$clave]=$valor;
+            }
+        }
+        //var_dump($data1);
+        $data1 = json_encode($data1);
+        $credenciales["http"]["content"] = $data1;
+        $config = stream_context_create($credenciales);
+        $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores/{$id}", false, $config);
+    }else{
+        echo "No se puede";
+    }
+    //header('Location: index.php');
 }
 ?>  
 <!DOCTYPE html>
@@ -51,6 +137,10 @@ if(isset($_POST['buscar'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 <style>
+    td{
+            text-align: center;
+            vertical-align: middle;
+    }
     .centrar{
         display:flex;
         justify-content: center;
@@ -157,13 +247,13 @@ if(isset($_POST['buscar'])){
                         <?php } ?>
                     placeholder="Cedula">
             </div>
-        </form>
+        <!-- </form> -->
     </div>
 </div>
 
 <div class="centrar">
-<div class="centrar scroll">
-    <div class="centrar content">
+<div class="centrar">
+    <div class="centrar">
     <table>
         <tr>
             <td>Nombre</td>
@@ -174,6 +264,7 @@ if(isset($_POST['buscar'])){
             <td>Horario de entrada</td>
             <td>Team</td>
             <td>Trainer</td>
+            <td>Elegir</td>
         </tr>
 
         <?php
@@ -193,6 +284,7 @@ if(isset($_POST['buscar'])){
                     <td>".$jota[$clave]['horario']."</td>
                     <td>".$jota[$clave]['team']."</td>
                     <td>".$jota[$clave]['trainer']."</td>
+                    <td><button type='submit' name='elegido' value=".$jota[$clave]['cedula'].">✔️</button></td>
                 </tr>
                 ";
             }
@@ -201,8 +293,9 @@ if(isset($_POST['buscar'])){
     </div>
 </div>
 </div>
+</form>
 
-
+<!-- <input type='radio' name='elegido' value=".$jota[$clave]['cedula']."> -->
 
     
 </body>

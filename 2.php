@@ -44,7 +44,7 @@ if(isset($_POST['editar'])){
             $id=$valor['id'];
         }
     }
-    echo $id;
+    //echo $id;
     if(isset($id)){
         $credenciales["http"]["method"] = "PUT";
         $credenciales["http"]["header"] = "Content-type: application/json";
@@ -73,7 +73,6 @@ if(isset($_POST['editar'])){
     }else{
         echo "No se puede";
     }
-    
     //header('Location: index.php');
 }
 
