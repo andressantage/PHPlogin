@@ -1,0 +1,12 @@
+echo "
+<tr>
+    <td>".$jota[$clave]['nombre']."</td>
+    <td>".$jota[$clave]['apellidos']."</td>
+    <td>".$jota[$clave]['direccion']."</td>
+    <td>".$jota[$clave]['edad']."</td>
+    <td>".$jota[$clave]['email']."</td>
+    <td>".$jota[$clave]['horario']."</td>
+    <td>".$jota[$clave]['team']."</td>
+    <td>".$jota[$clave]['trainer']."</td>
+</tr>
+";
