@@ -157,7 +157,7 @@ if(isset($_POST['editar'])){
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
     }
-    input name=""{
+    input{
         text-align:center;
     }
     label{
@@ -172,18 +172,20 @@ if(isset($_POST['editar'])){
         border: 1px solid black;
     }
     table{
-        border-spacing:0;
+        border-spacing: 0;
     }
     .scroll{
-    height: 50%;
-    width: 100%;
-    overflow: auto; 
-    /* overflow-x: scroll;  */
+        /* padding: 1rem 1rem; */
+        /* height: 400px; */
+        width: auto;
+        overflow-x: auto;
+        /* border: 0.5px solid grey;
+        border-radius: 0.5rem; */
     }
-    .content {
-    width: 90%; /* Ancho del contenido, solo para demostración */
-    height: 450px; /* Alto del contenido, solo para demostración */
-    margin: 10px;
+    .content{
+        width: 100%; /* Ancho del contenido, solo para demostración */
+ /* Alto del contenido, solo para demostración */
+        margin: 10px;
     }
 </style>
 </head>
@@ -251,50 +253,48 @@ if(isset($_POST['editar'])){
     </div>
 </div>
 
-<div class="centrar">
-<div class="centrar">
-    <div class="centrar">
-    <table>
-        <tr>
-            <td>Nombre</td>
-            <td>Apellidos</td>
-            <td>Direccion</td>
-            <td>Edad</td>
-            <td>Email</td>
-            <td>Horario de entrada</td>
-            <td>Team</td>
-            <td>Trainer</td>
-            <td>Elegir</td>
-        </tr>
-
-        <?php
-            $credenciales["http"]["method"] = "GET";
-            $credenciales["http"]["header"] = "Content-type: application/json";
-            $config = stream_context_create($credenciales);
-            $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
-            $jota=json_decode($_DATA, true); 
-            foreach($jota as $clave => $valor){ 
-                echo "
-                <tr>
-                    <td>".$jota[$clave]['nombre']."</td>
-                    <td>".$jota[$clave]['apellidos']."</td>
-                    <td>".$jota[$clave]['direccion']."</td>
-                    <td>".$jota[$clave]['edad']."</td>
-                    <td>".$jota[$clave]['email']."</td>
-                    <td>".$jota[$clave]['horario']."</td>
-                    <td>".$jota[$clave]['team']."</td>
-                    <td>".$jota[$clave]['trainer']."</td>
-                    <td><button type='submit' name='elegido' value=".$jota[$clave]['cedula'].">✔️</button></td>
-                </tr>
-                ";
-            }
-        ?>
-    </table>
+<!-- <div class="centrar"> -->
+    <div class="centrar scroll">
+        <div class="content">
+        <table>
+            <tr>
+                <td>Nombre</td>
+                <td>Apellidos</td>
+                <td>Direccion</td>
+                <td>Edad</td>
+                <td>Email</td>
+                <td>Horario de entrada</td>
+                <td>Team</td>
+                <td>Trainer</td>
+                <td>Elegir</td>
+            </tr>
+            <?php
+                $credenciales["http"]["method"] = "GET";
+                $credenciales["http"]["header"] = "Content-type: application/json";
+                $config = stream_context_create($credenciales);
+                $_DATA = file_get_contents("https://6460edfe185dd9877e33740e.mockapi.io/jugadores", false, $config);
+                $jota=json_decode($_DATA, true); 
+                foreach($jota as $clave => $valor){ 
+                    echo "
+                    <tr>
+                        <td>".$jota[$clave]['nombre']."</td>
+                        <td>".$jota[$clave]['apellidos']."</td>
+                        <td>".$jota[$clave]['direccion']."</td>
+                        <td>".$jota[$clave]['edad']."</td>
+                        <td>".$jota[$clave]['email']."</td>
+                        <td>".$jota[$clave]['horario']."</td>
+                        <td>".$jota[$clave]['team']."</td>
+                        <td>".$jota[$clave]['trainer']."</td>
+                        <td><button type='submit' name='elegido' value=".$jota[$clave]['cedula'].">✔️</button></td>
+                    </tr>
+                    ";
+                }
+            ?>
+        </table>
+        </div>
     </div>
-</div>
-</div>
 </form>
-
+<!-- </div> -->
 <!-- <input type='radio' name='elegido' value=".$jota[$clave]['cedula']."> -->
 
     
